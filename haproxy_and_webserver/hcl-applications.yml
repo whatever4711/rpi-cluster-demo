@@ -1,0 +1,25 @@
+#
+# scale mini webserver
+#
+
+crate:
+  image: hypriot/rpi-crate:latest
+  ports: 
+    - 4200:4200
+    - 4300:4300
+  environment:
+    - CRATE_HEAP_SIZE=1g
+
+hypriot-website:
+  image: hypriot/rpi-busybox-httpd
+
+demo: 
+  image: firecyberice/armhf-demowebserver:voting
+  environment:
+    - CRATE_REST_API=1.2.3.4:4200
+
+demo-hostnameonly:
+  image: firecyberice/armhf-demowebserver:hostname
+  environment:
+    - CRATE_REST_API=1.2.3.4:4200
+
