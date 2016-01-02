@@ -5,9 +5,9 @@ HCL Demo "Loadbalancing with Haproxy"
 
   `git clone git@github.com:hypriot/rpi-cluster-demo.git`
 
-- Setup Haproxy, consul-template and Registrator:
+- Setup Haproxy, consul-template and registrator:
 
-  `docker-compose -f hcl-infrastructure.yml up -d`
+  `docker-compose -f loadbalancing-infrastructure.yml up -d`
 
 - Set environment variables for Swarm:
 
@@ -15,7 +15,7 @@ HCL Demo "Loadbalancing with Haproxy"
 
 - Start some webservers, distributed on cluster nodes:
 
-  `docker-compose -f hcl-applications.yml scale demo-hostnameonly=X`
+  `docker-compose -f loadbalancing-applications.yml scale demo-hostnameonly=X`
 
   with `X` as the number of webservers. Note that as of today the Docker daemon can only handle up to 30 containers on one Raspberry Pi by default. Thus `X` should be 30 times the number of your RPis at max.
 
