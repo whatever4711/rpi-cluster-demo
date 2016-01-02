@@ -1,18 +1,29 @@
-HCL demo haproxy and webserver
+HCL Demo "Loadbalancing with Haproxy"
 --------------------------------
+- Login via SSH to the master node of your cluster.
+- Checkout this repository:
 
-- Checkout "haproxy_loadbalancing_webserver_for_HA" https://github.com/hypriot/rpi-cluster-demo
-- Setup Haproxy, consul-template and registrator
+  `git clone git@github.com:hypriot/rpi-cluster-demo.git`
+
+- Setup Haproxy, consul-template and Registrator:
+
   `docker-compose -f hcl-infrastructure.yml up -d`
-- Set ENV variable for swarm
+
+- Set environment variables for Swarm:
+
   `export DOCKER_HOST=tcp://192.168.200.1:2378`
-- Start some webservers, distributed on cluster nodes
+
+- Start some webservers, distributed on cluster nodes:
+
   `docker-compose -f hcl-applications.yml scale demo-hostnameonly=X`
-  with `X` as the number of webservers
-- Open browser at IP of master node and restart page. Every page should show a new website with a new hostname.
+
+  with `X` as the number of webservers. Note that as of today the Docker daemon can only handle up to 30 containers on one Raspberry Pi by default. Thus `X` should be 30 times the number of your RPis at max.
+
+- Open browser at IP of master node and restart page. Every page should show a new website with a new hostname because HAproxy is configured to follow the **round-robin** strategy for incoming HTTP requests.
 
 
-HCL demo haproxy and webserver and DB
+
+//TODO HCL Demo "Loadbalancing and HA with Haproxy and Crate.io"
 --------------------------------------
 
 - Checkout "haproxy_loadbalancing_webserver_for_HA" https://github.com/hypriot/rpi-cluster-demo
