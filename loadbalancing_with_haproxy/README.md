@@ -1,14 +1,13 @@
 Loadbalancing with HAproxy
 ==========================
 
-Overview
----------
-This use case is about to use HAproxy as loadbalancer several webservers.
+This use case is about to use HAproxy as loadbalancer for several webservers.
 
-We use [Registrator from Gliderlabs](https://github.com/gliderlabs/registrator) to recognize new Docker containers that also offer a website. These new containers are registred in consul, which is globally available in the Hypriot Cluster Lab. Next, [consul-template](https://github.com/hashicorp/consul-template) recognize that a new webserver is up and tells the IP address of the new webserver to HAproxy.
+We use [Registrator from Gliderlabs](https://github.com/gliderlabs/registrator) to recognize new Docker containers that also offer a website. These new containers are registered in consul, which is globally available in the Hypriot Cluster Lab. Next, [consul-template](https://github.com/hashicorp/consul-template) recognize that a new webserver is up and tells the IP address of the new webserver to HAproxy.
 Thus, HAproxy always automatically knows about all available webservers and will forward incoming requests sequentially to all of them (following round-robin strategy).
 
-**Note:** For now, all containers are started only on a single node! We have not yet found an easy way to bring registrator, consul-template and Docker networking together. You are very welcome to join us extending this!
+**Note:** For now, all containers are started only on a single node! We have not yet found an easy way to bring registrator, consul-template and Docker networking together. Please see section **Missing features** for more details. You are very welcome to join us extending this!
+
 
 Let's do it step by step
 ------------------------
@@ -56,6 +55,7 @@ Additional commands
 - Unset DOCKER_HOST variable
 
   `unset DOCKER_HOST`
+
 
 Reset your environment
 ----------------------

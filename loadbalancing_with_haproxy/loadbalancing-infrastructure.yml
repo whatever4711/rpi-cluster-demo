@@ -14,7 +14,6 @@ consultemplate:
   image: hypriot/rpi-consul-template
   restart: always
   volumes:
-    - ./docker_arm:/usr/bin/docker
     - /var/run/docker.sock:/var/run/docker.sock
     - ./haproxy/:/haproxy/
 #    - ./consul-template_restarts_haproxy.sh:/consul-template_restarts_haproxy.sh
