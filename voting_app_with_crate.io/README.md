@@ -1,5 +1,14 @@
-HCL Demo "Webservers with distributed Crate.io database"
---------------------------------------
+Webserver with distributed Crate.io database
+============================================
+
+Overview
+---------
+This use case is about to use a distributed database over several nodes.  We will start a small webserver that communicates with crate.io databases that are fully synchronized over several nodes in the network.
+
+**Note:** For now, all containers are started only on a single node! We have not yet found an easy way to bring crate.io and Docker networking together. You are very welcome to join us extending this!
+
+Let's do it step by step
+-----------------------------
 
 - Login via SSH to an arbitrary node of your cluster.
 - Checkout this repository:
@@ -46,8 +55,8 @@ Then you should see a list of how often you pressed the **dogs** or **cats** but
 
   `docker ps`
 
-and see the **PORTS** column of your crate containers. Of one of them, choose a port starting with `32`. Then replace this port in the URL pointing to the webinterface of crate. This is the webinterface of another the container.
-Using the query statement above you should see the same results as on all other webinterfaces of crate. Thus, all crate nodes are fully synchronized and highly available.
+and see the **PORTS** column of your crate containers. Choose a port from one of them starting with `32`. Then replace this port in the URL pointing to the webinterface of crate. This is the webinterface of another  container.
+Using the query statement above you should see the same results as on all other webinterfaces of crate. Thus, all crate nodes are fully synchronized.
 
 
 Reset your environment
@@ -58,7 +67,3 @@ Execute the following command in the folder in which the *.yml* files reside:
 docker-compose -f loadbalancing-applications.yml kill && \
 docker-compose -f loadbalancing-applications.yml rm -f
 ```
-
-Roadmap
--------
-  - Distribute the voting app and crate in the whole cluster. We have not yet found an easy way to achive this yet.
