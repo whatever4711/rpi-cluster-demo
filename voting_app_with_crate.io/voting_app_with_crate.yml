@@ -1,0 +1,21 @@
+#
+# scale mini webserver
+#
+
+crate:
+  image: hypriot/rpi-crate:0.54.1
+  ports: 
+    - 4200:4200
+    - 4300:4300
+  environment:
+    - CRATE_HEAP_SIZE=256m
+
+demo-voting: 
+  image: firecyberice/armhf-demowebserver:voting
+  ports:
+    - 80:80
+  links:
+    - crate
+  environment:
+    - CRATE_REST_API=crate:4200
+
