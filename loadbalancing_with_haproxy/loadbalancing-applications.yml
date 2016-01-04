@@ -7,6 +7,3 @@ hypriot-website:
 
 demo-hostname:
   image: firecyberice/armhf-demowebserver:hostname
-  environment:
-    - CRATE_REST_API=1.2.3.4:4200
-
