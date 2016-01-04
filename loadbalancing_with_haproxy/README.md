@@ -43,3 +43,4 @@ Additional commands
 - Unset DOCKER_HOST variable
 
   `unset DOCKER_HOST`
+

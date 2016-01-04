@@ -14,7 +14,7 @@ consultemplate:
   image: hypriot/rpi-consul-template
   restart: always
   volumes:
-    - ./docker_armhf:/usr/bin/docker
+    - ./docker_arm:/usr/bin/docker
     - /var/run/docker.sock:/var/run/docker.sock
     - ./haproxy/:/haproxy/
 #    - ./consul-template_restarts_haproxy.sh:/consul-template_restarts_haproxy.sh
@@ -31,10 +31,8 @@ haproxy:
   image: hypriot/rpi-haproxy:1.5.8
   restart: always
   ports:
-    - 80:80
-    - 443:443
-    - 8080:8080
+    - "0.0.0.0:80:80"
+    - "0.0.0.0:443:443"
   volumes:
     - ./haproxy/:/haproxy-override/
 #  command: haproxy -f /haproxy-override/haproxy.cfg -p /var/run/haproxy.pid
-
