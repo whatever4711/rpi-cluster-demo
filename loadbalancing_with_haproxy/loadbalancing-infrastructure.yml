@@ -7,7 +7,7 @@
 swarmregistrator:
   environment:
     - DOCKER_HOST=tcp://192.168.200.1:2378
-  image: hypriot/rpi-registrator
+  image: hypriot/rpi-registrator:master
   command: -internal consul://192.168.200.1:8500
 
 consultemplate:
