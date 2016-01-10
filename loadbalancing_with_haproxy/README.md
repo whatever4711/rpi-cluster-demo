@@ -15,20 +15,28 @@ Let's do it step by step
 - Login via SSH to the master node of your cluster.
 - Checkout this repository:
 
-  `git clone git@github.com:hypriot/rpi-cluster-demo.git`
+```
+git clone git@github.com:hypriot/rpi-cluster-demo.git
+```
 
 - Setup Haproxy, consul-template and registrator:
 
-  `docker-compose -p infrastructure -f loadbalancing-infrastructure.yml up -d`
+```
+docker-compose -p infrastructure -f loadbalancing-infrastructure.yml up -d
+```
 
 - Create Docker overlay network and connect HAproxy to overlay network
 
-  `docker network create --driver overlay apps`
-  `docker network connect apps infrastructure_haproxy_1`
+```
+docker network create --driver overlay apps
+docker network connect apps infrastructure_haproxy_1
+```
 
 - Start some webservers, distributed on cluster nodes:
 
-  `docker-compose --x-networking --x-network-driver overlay -p apps -f loadbalancing-applications.yml scale demo-hostname=X`
+```
+docker-compose --x-networking --x-network-driver overlay -p apps -f loadbalancing-applications.yml scale demo-hostname=X
+```
 
   with `X` as the number of webservers. Note that as of today the Docker daemon can only handle up to 30 containers on one Raspberry Pi by default. Thus `X` should be 30 times the number of your RPis at max.
 
