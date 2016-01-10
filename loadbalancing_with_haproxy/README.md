@@ -25,14 +25,11 @@ git clone https://github.com/hypriot/rpi-cluster-demo.git
 docker-compose -p infrastructure -f loadbalancing-infrastructure.yml up -d
 ```
 
-- Create Docker overlay network and connect HAproxy to overlay network
+- Create a new Docker overlay network
 
 ```
 docker network create --driver overlay apps
-docker network connect apps infrastructure_haproxy_1
 ```
-
-To test this step, you can have a look inside the HAproxy container to see if it got two network interfaces. These will be shown at the end of 
 
 - Start some webservers, distributed on cluster nodes:
 
@@ -40,7 +37,20 @@ To test this step, you can have a look inside the HAproxy container to see if it
 docker-compose --x-networking --x-network-driver overlay -p apps -f loadbalancing-applications.yml scale demo-hostname=X
 ```
 
-  with `X` as the number of webservers. Note that as of today the Docker daemon can only handle up to 30 containers on one Raspberry Pi by default. Thus `X` should be 30 times the number of your RPis at max.
+with `X` as the number of webservers. Note that as of today the Docker daemon can only handle up to 30 containers on one Raspberry Pi by default. Thus `X` should be 30 times the number of your RPis at max.
+
+- Connect HAproxy to overlay network and restart it
+
+```
+docker network connect apps infrastructure_haproxy_1
+docker restart infrastructure_haproxy_1
+```
+
+To test this step, you can have a look inside the HAproxy container to see if it got two network interfaces. These will be shown at the end of the following command:
+
+```
+docker inspect infrastructure_haproxy_1
+```
 
 - Open browser at IP of master node and restart page. Every page should show a new website with a new hostname because HAproxy is configured to follow the **round-robin** strategy. Thus, for every incoming HTTP request HAproxy forwards each request to a new node.
 
