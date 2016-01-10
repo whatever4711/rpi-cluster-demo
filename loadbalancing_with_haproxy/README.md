@@ -16,7 +16,7 @@ Let's do it step by step
 - Checkout this repository:
 
 ```
-git clone git@github.com:hypriot/rpi-cluster-demo.git
+git clone https://github.com/hypriot/rpi-cluster-demo.git
 ```
 
 - Setup Haproxy, consul-template and registrator:
