@@ -16,15 +16,7 @@ consultemplate:
   volumes:
     - /var/run/docker.sock:/var/run/docker.sock
     - ./haproxy/:/haproxy/
-#    - ./consul-template_restarts_haproxy.sh:/consul-template_restarts_haproxy.sh
-  environment:
-    - HAPROXYNAME=loadbalancingwithhaproxy_haproxy_1
-    - CONSULIP=192.168.200.1
-    - SWARMIP=192.168.200.1
-  command: -consul 192.168.200.1:8500 -template "/haproxy/haproxy.ctmpl:/haproxy/haproxy.cfg:docker exec loadbalancingwithhaproxy_haproxy_1 /haproxy-start reload"
-#/consul-template_restarts_haproxy.sh"
-#docker exec cluster_haproxy_1 /haproxy-start reload"
-
+  command: -consul 192.168.200.1:8500 -template "/haproxy/haproxy.ctmpl:/haproxy/haproxy.cfg:docker exec infrastructure_haproxy_1 /haproxy-start reload"
 
 haproxy:
   image: hypriot/rpi-haproxy:1.5.8
@@ -34,4 +26,4 @@ haproxy:
     - "0.0.0.0:443:443"
   volumes:
     - ./haproxy/:/haproxy-override/
-#  command: haproxy -f /haproxy-override/haproxy.cfg -p /var/run/haproxy.pid
+
