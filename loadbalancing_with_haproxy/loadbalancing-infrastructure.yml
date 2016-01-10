@@ -11,9 +11,10 @@ swarmregistrator:
   command: -internal consul://192.168.200.1:8500
 
 consultemplate:
-  image: hypriot/rpi-consul-template
+  image: hypriot/rpi-consul-template:0.11.0
   restart: always
   volumes:
+    - ~/docker_arm:/usr/local/bin/docker
     - /var/run/docker.sock:/var/run/docker.sock
     - ./haproxy/:/haproxy/
   command: -consul 192.168.200.1:8500 -template "/haproxy/haproxy.ctmpl:/haproxy/haproxy.cfg:docker exec infrastructure_haproxy_1 /haproxy-start reload"
