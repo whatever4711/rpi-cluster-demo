@@ -32,6 +32,8 @@ docker network create --driver overlay apps
 docker network connect apps infrastructure_haproxy_1
 ```
 
+To test this step, you can have a look inside the HAproxy container to see if it got two network interfaces. These will be shown at the end of 
+
 - Start some webservers, distributed on cluster nodes:
 
 ```
@@ -41,22 +43,6 @@ docker-compose --x-networking --x-network-driver overlay -p apps -f loadbalancin
   with `X` as the number of webservers. Note that as of today the Docker daemon can only handle up to 30 containers on one Raspberry Pi by default. Thus `X` should be 30 times the number of your RPis at max.
 
 - Open browser at IP of master node and restart page. Every page should show a new website with a new hostname because HAproxy is configured to follow the **round-robin** strategy. Thus, for every incoming HTTP request HAproxy forwards each request to a new node.
-
-
-Missing feature
----------------
-HAproxy is not able to forward incoming requests to containers on other nodes inside the new docker overlay network of Docker 1.9.
-
-The reason is that gliderlabs/registrator is not yet able to manage the new Docker networking feature.
-
-To fix this manually, you need to change each of these lines
-
-`server node 192.168.0.138:80 maxconn 3` in `rpi-cluster-demo/haproxy/haproxy.cfg`
-
-by replacing the IP address with the name of the container, such as
-`loadbalancingwithhaproxy_demo-voting_2`.
-
-For an automated fix, see PROPOSAL.md.
 
 
 Additional commands
