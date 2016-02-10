@@ -26,8 +26,8 @@ frontend http-in
 backend builder
     balance roundrobin   
     option httpclose
-    option forwardfor{{range services}}{{range service .Name}}{{if eq .Port 80}} 
-    server node {{.Address}}:{{.Port}} maxconn 3 {{end}}{{end}}{{end}}
+    option forwardfor {{range service "armhf-demowebserver"}}
+    server {{.Node}} {{.Address}}:{{.Port}} maxconn 3 {{end}}
 
 # Other example
 #listen http-in

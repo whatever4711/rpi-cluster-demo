@@ -11,10 +11,12 @@ services:
     environment:
       - DOCKER_HOST=tcp://192.168.9.250:2378
       - constraint:node==roupi
+    networks:
+      - apps
     command: -internal consul://192.168.9.250:8500
   
   consultemplate:
-    image: hypriot/rpi-consul-template
+    image: whatever4711/rpi-consul-template
     restart: always
     depends_on:
       - swarmregistrator
@@ -22,16 +24,15 @@ services:
       - DOCKER_HOST=tcp://192.168.9.250:2378
       - constraint:node==roupi
     volumes:
-      - ./docker_arm:/usr/local/bin/docker
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./haproxy/:/haproxy/
-    command: -consul 192.168.9.250:8500 -template "/haproxy/haproxy.ctmpl:/haproxy/haproxy.cfg:/usr/local/bin/docker exec lb_haproxy_1 /haproxy-start reload"
+      - $PWD/haproxy/:/haproxy/
+    command: -consul 192.168.9.250:8500 -template "/haproxy/haproxy.ctmpl:/haproxy/haproxy.cfg:docker exec lb_haproxy_1 /haproxy-start reload"
   
   haproxy:
     image: hypriot/rpi-haproxy:1.5.8
     restart: always
     depends_on:
-      - consultemplate
+      - swarmregistrator 
     environment:
       - DOCKER_HOST=tcp://192.168.9.250:2378
       - constraint:node==roupi
