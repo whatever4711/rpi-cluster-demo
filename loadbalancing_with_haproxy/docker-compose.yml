@@ -1,0 +1,67 @@
+#
+# start swarm-registrator
+# start consul template
+# start haproxy
+#
+version: '2'
+
+services:
+  swarmregistrator:
+    image: hypriot/rpi-registrator:master
+    environment:
+      - DOCKER_HOST=tcp://192.168.9.250:2378
+      - constraint:node==roupi
+    command: -internal consul://192.168.9.250:8500
+  
+  consultemplate:
+    image: hypriot/rpi-consul-template
+    restart: always
+    depends_on:
+      - swarmregistrator
+    environment:
+      - DOCKER_HOST=tcp://192.168.9.250:2378
+      - constraint:node==roupi
+    volumes:
+      - ./docker_arm:/usr/local/bin/docker
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./haproxy/:/haproxy/
+    command: -consul 192.168.9.250:8500 -template "/haproxy/haproxy.ctmpl:/haproxy/haproxy.cfg:/usr/local/bin/docker exec lb_haproxy_1 /haproxy-start reload"
+  
+  haproxy:
+    image: hypriot/rpi-haproxy:1.5.8
+    restart: always
+    depends_on:
+      - consultemplate
+    environment:
+      - DOCKER_HOST=tcp://192.168.9.250:2378
+      - constraint:node==roupi
+    networks:
+      - apps
+    ports:
+      - "0.0.0.0:80:80"
+      - "0.0.0.0:443:443"
+    volumes:
+      - ./haproxy/:/haproxy-override/
+  
+  #
+  # scale mini webserver
+  #
+  
+  hypriot-website:
+    image: hypriot/rpi-busybox-httpd
+    depends_on:
+      - swarmregistrator
+    networks:
+      - apps
+  
+  demo-hostname:
+    image: firecyberice/armhf-demowebserver:hostname
+    depends_on:
+      - swarmregistrator
+    networks:
+      - apps
+
+networks:
+  apps:
+    driver: overlay
+
