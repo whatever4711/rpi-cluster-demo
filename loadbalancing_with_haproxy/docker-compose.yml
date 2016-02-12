@@ -9,36 +9,38 @@ services:
   swarmregistrator:
     image: hypriot/rpi-registrator:master
     environment:
-      - DOCKER_HOST=tcp://192.168.200.1:2378
-      - constraint:node==master
+      - DOCKER_HOST=tcp://192.168.9.250:2378
+      - constraint:node==roupi
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
     networks:
       - apps
-    command: -internal -cleanup -ttl 15 -ttl-refresh 5 consul://192.168.200.1:8500
+    command: -internal -cleanup -ttl 15 -ttl-refresh 5 consul://192.168.9.250:8500
   
   consultemplate:
     image: whatever4711/rpi-consul-template
     depends_on:
       - haproxy 
+    networks:
+      - apps
     environment:
-      - DOCKER_HOST=tcp://192.168.200.1:2378
+      - DOCKER_HOST=tcp://192.168.9.250:2378
       - constraint:node==roupi
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - $PWD/haproxy/:/haproxy/
-    command: -consul 192.168.200.1:8500 -template "/haproxy/haproxy.ctmpl:/haproxy/haproxy.cfg:docker exec loadbalancing_haproxy_1 /haproxy-start reload"
+    command: -consul 192.168.9.250:8500 -template "/haproxy/haproxy.ctmpl:/haproxy/haproxy.cfg:docker exec loadbalancing_haproxy_1 /haproxy-start reload"
   
   haproxy:
     image: hypriot/rpi-haproxy:1.5.8
     environment:
-      - DOCKER_HOST=tcp://192.168.200.1:2378
-      - constraint:node==master
+      - DOCKER_HOST=tcp://192.168.9.250:2378
+      - constraint:node==roupi
     networks:
       - apps
     ports:
-      - "0.0.0.0:80:80"
-      - "0.0.0.0:443:443"
+      - 0.0.0.0:80:80
+      - 0.0.0.0:443:443
     volumes:
       - ./haproxy/:/haproxy-override/
   
@@ -52,13 +54,15 @@ services:
       - consultemplate 
     networks:
       - apps
+    environment:
+      - constraint:node!=roupi
   
-  demo-hostname:
-    image: firecyberice/armhf-demowebserver:hostname
-    depends_on:
-      - consultemplate 
-    networks:
-      - apps
+#  demo-hostname:
+#    image: firecyberice/armhf-demowebserver:hostname
+#    depends_on:
+#      - consultemplate 
+#    networks:
+#      - apps
 
 networks:
   apps:

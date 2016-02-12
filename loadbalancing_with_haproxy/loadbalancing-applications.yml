@@ -1,9 +1,0 @@
-#
-# scale mini webserver
-#
-
-hypriot-website:
-  image: hypriot/rpi-busybox-httpd
-
-demo-hostname:
-  image: firecyberice/armhf-demowebserver:hostname
