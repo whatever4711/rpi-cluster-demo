@@ -23,7 +23,7 @@ services:
       - haproxy 
     environment:
       - DOCKER_HOST=tcp://192.168.200.1:2378
-      - constraint:node==roupi
+      - constraint:node==master
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - $PWD/haproxy/:/haproxy/
