@@ -27,7 +27,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - $PWD/haproxy/:/haproxy/
-    command: -consul 192.168.9.250:8500 -template "/haproxy/haproxy.ctmpl:/haproxy/haproxy.cfg:docker exec lb_haproxy_1 /haproxy-start reload"
+    command: -consul 192.168.9.250:8500 -template "/haproxy/haproxy.ctmpl:/haproxy/haproxy.cfg:docker exec loadbalancing_haproxy_1 /haproxy-start reload"
   
   haproxy:
     image: hypriot/rpi-haproxy:1.5.8
